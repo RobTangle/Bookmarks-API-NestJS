@@ -34,7 +34,7 @@ model Bookmark {
   link String
 
   userId Int
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade) //onDelete: Cascade == When the parent model of the Bookmark is deleted, the bookmark should be deleted as well 
 
   @@map("bookmarks")
 }
