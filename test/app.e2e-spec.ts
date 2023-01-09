@@ -5,6 +5,7 @@ import { PrismaService } from '../src/prisma/prisma.service';
 import { AppModule } from '../src/app.module';
 import { AuthDto } from 'src/auth/dto';
 import { EditUserDto } from 'src/user/dto';
+import { CreateBookmarkDto, EditBookmarkDto } from 'src/bookmark/dto';
 
 describe('App e2e', () => {
   let app: INestApplication;
@@ -134,12 +135,105 @@ describe('App e2e', () => {
       });
     });
   });
-});
 
-describe('Bookmarks', () => {
-  describe('Create bookmark', () => {});
-  describe('Get bookmark by id', () => {});
-  describe('Edit bookmark', () => {});
-  describe('Delete bookmark', () => {});
-  describe('Get bookmarks', () => {});
+  describe('Bookmarks', () => {
+    describe('Get empty bookmarks', () => {
+      it('should get no bookmarks', () => {
+        return pactum
+          .spec()
+          .get('/bookmarks')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAccessToken}',
+          })
+          .expectStatus(200)
+          .expectBody([])
+          .inspect();
+      });
+    });
+    describe('Create bookmark', () => {
+      const dto: CreateBookmarkDto = {
+        title: 'Kubernetes Tutorial',
+        link: 'https://www.youtube.com/watch?v=d6WC5n9G_sM',
+      };
+      it('should create bookmark', () => {
+        return pactum
+          .spec()
+          .post('/bookmarks')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAccessToken}',
+          })
+          .withBody(dto)
+          .expectStatus(201)
+          .stores('bookmarkId', 'id');
+      });
+    });
+    describe('Get the only bookmark', () => {
+      it('should get one bookmark', () => {
+        return pactum
+          .spec()
+          .get('/bookmarks')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAccessToken}',
+          })
+          .expectStatus(200)
+          .expectJsonLength(1);
+      });
+    });
+    describe('Get bookmark by id', () => {
+      it('shoud get bookmark by id', () => {
+        return pactum
+          .spec()
+          .get('/bookmarks/{id}')
+          .withPathParams('id', '$S{bookmarkId}')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAccessToken}',
+          })
+          .expectStatus(200)
+          .expectBodyContains('$S{bookmarkId}');
+      });
+    });
+    describe('Get bookmarks', () => {
+      it('should return the user bookmarks', () => {
+        return pactum
+          .spec()
+          .get('/bookmarks')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAccessToken}',
+          })
+          .expectStatus(200)
+          .expectJsonLength(1);
+      });
+    });
+    describe('Edit bookmark by id', () => {
+      const dto: EditBookmarkDto = {
+        description: 'A great video!',
+      };
+      it('shoud edit bookmark', () => {
+        return pactum
+          .spec()
+          .patch('/bookmarks/{id}')
+          .withPathParams('id', '$S{bookmarkId}')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAccessToken}',
+          })
+          .withBody(dto)
+          .expectStatus(200)
+          .expectBodyContains('A great video!')
+          .inspect();
+      });
+    });
+    describe('Delete bookmark', () => {
+      it('shoud edit bookmark', () => {
+        return pactum
+          .spec()
+          .delete('/bookmarks/{id}')
+          .withPathParams('id', '$S{bookmarkId}')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAccessToken}',
+          })
+          .expectStatus(204)
+          .inspect();
+      });
+    });
+  });
 });
