@@ -231,8 +231,17 @@ describe('App e2e', () => {
           .withHeaders({
             Authorization: 'Bearer $S{userAccessToken}',
           })
-          .expectStatus(204)
-          .inspect();
+          .expectStatus(204);
+      });
+      it('should get no bookmarks', () => {
+        return pactum
+          .spec()
+          .get('/bookmarks')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAccessToken}',
+          })
+          .expectStatus(200)
+          .expectJsonLength(0);
       });
     });
   });
