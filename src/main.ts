@@ -12,6 +12,10 @@ async function bootstrap() {
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
+      // transform: true // intenta transformar el input a el tipo de dato que le indicamos en la ruta que esperamos que sea. Excelente!
+      forbidNonWhitelisted: true,
+      disableErrorMessages:
+        process.env.NODE_ENV === 'PRODUCTION' ? true : false,
     }),
   );
   await app.listen(3333);
