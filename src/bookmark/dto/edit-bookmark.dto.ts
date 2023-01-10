@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class EditBookmarkDto {
   @IsString()
@@ -14,4 +14,13 @@ export class EditBookmarkDto {
   @IsNotEmpty()
   @IsOptional()
   link?: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
+  category?: string;
+
+  @IsArray()
+  @IsOptional()
+  keywords?: string[];
 }
