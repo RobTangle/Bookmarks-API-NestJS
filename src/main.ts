@@ -13,7 +13,7 @@ async function bootstrap() {
     new ValidationPipe({
       whitelist: true,
       // transform: true // intenta transformar el input a el tipo de dato que le indicamos en la ruta que esperamos que sea. Excelente!
-      forbidNonWhitelisted: true,
+      forbidNonWhitelisted: false,
       disableErrorMessages:
         process.env.NODE_ENV === 'PRODUCTION' ? true : false,
     }),
