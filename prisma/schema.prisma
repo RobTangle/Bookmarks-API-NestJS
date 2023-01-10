@@ -32,6 +32,8 @@ model Bookmark {
   title String
   description String?
   link String
+  category String
+  keywords String[]
 
   userId Int
   user User @relation(fields: [userId], references: [id], onDelete: Cascade) //onDelete: Cascade == When the parent model of the Bookmark is deleted, the bookmark should be deleted as well. No uso este método, pero es válido usarlo. Voy a usar en prisma.service clearDb()
