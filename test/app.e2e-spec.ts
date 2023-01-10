@@ -154,6 +154,8 @@ describe('App e2e', () => {
       const dto: CreateBookmarkDto = {
         title: 'Kubernetes Tutorial',
         link: 'https://www.youtube.com/watch?v=d6WC5n9G_sM',
+        category: 'Back-end',
+        keywords: ['back-end', 'kubernetes', 'server', 'microservice'],
       };
       it('should create bookmark', () => {
         return pactum
@@ -207,6 +209,7 @@ describe('App e2e', () => {
     describe('Edit bookmark by id', () => {
       const dto: EditBookmarkDto = {
         description: 'A great video!',
+        category: 'general',
       };
       it('shoud edit bookmark', () => {
         return pactum
